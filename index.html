@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World of Imagine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tilt-card {
+      transition: transform 0.3s ease;
+      will-change: transform;
+    }
+
+    .tilt-card:hover {
+      transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #e0d4ff, #b6e0fe);
+      overflow-x: hidden;
+    }
+
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen px-4 py-6 font-sans">
+  <canvas id="particles"></canvas>
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl font-bold text-center mb-4 fade-in">World of <span class="text-purple-600">Imagine</span></h1>
+    <p class="text-center text-gray-700 mb-6 fade-in">Share your creative ideas and explore others' imaginations 💭✨</p>
+
+    <!-- Submission Form -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8 fade-in">
+      <h2 class="text-xl font-semibold mb-4">Submit Your Idea</h2>
+      <form id="ideaForm" class="space-y-4">
+        <input type="text" id="name" placeholder="Your Name (optional)" class="w-full border rounded-md px-3 py-2" />
+        <input type="text" id="title" placeholder="Idea Title" required class="w-full border rounded-md px-3 py-2" />
+        <textarea id="description" placeholder="Describe your idea..." required class="w-full border rounded-md px-3 py-2"></textarea>
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">Submit</button>
+      </form>
+    </div>
+
+    <!-- Idea Feed -->
+    <div class="bg-white rounded-xl shadow-md p-6 fade-in">
+      <h2 class="text-xl font-semibold mb-4">Creative Ideas</h2>
+      <div id="ideaList" class="space-y-4">
+        <!-- Dummy ideas here -->
+        <div class="border p-4 rounded-md bg-purple-50 floating tilt-card">
+          <h3 class="font-bold text-lg">App to Match Colors from Nature 🌿</h3>
+          <p class="text-sm text-gray-700">A mobile app that lets you take a picture of anything in nature and generates a color palette for design inspiration.</p>
+          <p class="text-xs text-right text-gray-500 mt-2">– Aanya</p>
+        </div>
+        <div class="border p-4 rounded-md bg-purple-50 floating tilt-card">
+          <h3 class="font-bold text-lg">Campus Skill Swap Platform 🤝</h3>
+          <p class="text-sm text-gray-700">A web app for students to exchange skills—like logo design for coding lessons, photography for presentation help.</p>
+          <p class="text-xs text-right text-gray-500 mt-2">– Jay</p>
+        </div>
+        <div class="border p-4 rounded-md bg-purple-50 floating tilt-card">
+          <h3 class="font-bold text-lg">Invisible Mood Diary App 📱</h3>
+          <p class="text-sm text-gray-700">An app that lets users record their emotions using abstract visuals or colors instead of words—perfect for daily reflections.</p>
+          <p class="text-xs text-right text-gray-500 mt-2">– Rhea</p>
+        </div>
+      </div>
+    </div>
+
+<!-- Floating Space Illustration -->
+<div class="flex justify-center mt-12 fade-in">
+  <img src="IMAGES/image-from-rawpixel-id-16399767-png.png" alt="Floating Space Illustration" 
+    class="w-64 floating rounded-lg shadow-xl" />
+</div>
+
+<!-- Footer with Animation and Social Links -->
+<footer class="text-center mt-12 text-sm text-gray-600 fade-in">
+  <p>
+    Made with <span class="text-pink-500">❤️</span> by <span class="font-semibold text-purple-600">Team Imagine & Inspire</span>
+  </p>
+  </div>
+</footer>
+
+
+  </div>
+
+  <script>
+    const form = document.getElementById("ideaForm");
+    const ideaList = document.getElementById("ideaList");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value || "Anonymous";
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+
+      const ideaCard = document.createElement("div");
+      ideaCard.className = "border p-4 rounded-md bg-purple-50 floating tilt-card fade-in";
+
+      ideaCard.innerHTML = `
+        <h3 class="font-bold text-lg">${title}</h3>
+        <p class="text-sm text-gray-700">${description}</p>
+        <p class="text-xs text-right text-gray-500 mt-2">– ${name}</p>
+      `;
+
+      ideaList.prepend(ideaCard);
+
+      form.reset();
+    });
+
+    // Sparkles / Particles
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = Array.from({ length: 100 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: Math.random() - 0.5,
+      dy: Math.random() - 0.5,
+      opacity: Math.random()
+    }));
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fill();
+
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+
+    drawParticles();
+  </script>
+</body>
+
+</html>
